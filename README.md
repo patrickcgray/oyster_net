@@ -4,10 +4,10 @@ This work shows the use of Mask R-CNN for detecting oyster reefs in aerial drone
 
 
 ## Installation
-From the [Releases page](https://github.com/matterport/Mask_RCNN/releases) page download [version 2.1](https://github.com/matterport/Mask_RCNN/releases/tag/v2.1) and follow instructions for setting up Mask R-CNN.
 
-You can use the Dockerfile included in this repository to train the CNN.
+You can use the Dockerfile included in the `training/` directory of this repository to train the CNN and you can use the Dockerfile in `data_mgmt/` to manage the drone imagery and process everything. All processed data and raw data is available here: 
 
+You will need Mask_RCNN installed in a directory at an equal level with this one. From the [Releases page](https://github.com/matterport/Mask_RCNN/releases) page download [version 2.1](https://github.com/matterport/Mask_RCNN/releases/tag/v2.1) and follow instructions here https://github.com/matterport/Mask_RCNN#installation for setting up Mask R-CNN.
 
 ## Run Jupyter notebooks
 Open the `inspect_oyster_data.ipynb` or `inspect_oyster_model.ipynb` Jupter notebooks. You can use these notebooks to explore the dataset and run through the detection pipelie step by step.

@@ -1,30 +1,16 @@
 """
-Mask R-CNN
-Train on the toy Oyster dataset and implement color splash effect.
-
-Copyright (c) 2018 Matterport, Inc.
-Licensed under the MIT License (see LICENSE for details)
-Written by Waleed Abdulla
-
-------------------------------------------------------------
-
 Usage: import the module (see Jupyter notebooks for examples), or run from
        the command line as such:
 
     # Train a new model starting from pre-trained COCO weights
     python3 oyster.py train --dataset=/path/to/oyster/dataset --weights=coco
+    
+    # Resume training a model based on specific model weights
+    python3 oyster.py train --dataset=/path/to/oyster/dataset --weights=/path/to/weight/file
 
     # Resume training a model that you had trained earlier
     python3 oyster.py train --dataset=/path/to/oyster/dataset --weights=last
 
-    # Train a new model starting from ImageNet weights
-    python3 oyster.py train --dataset=/path/to/oyster/dataset --weights=imagenet
-
-    # Apply color splash to an image
-    python3 oyster.py splash --weights=/path/to/weights/file.h5 --image=<URL or path to file>
-
-    # Apply color splash to video using the last weights you trained
-    python3 oyster.py splash --weights=last --video=<URL or path to file>
 """
 
 import os
