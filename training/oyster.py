@@ -35,10 +35,13 @@ import numpy as np
 import skimage.draw
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../../")
+ROOT_DIR = os.path.abspath("../")
+
+# Root directory of MRCNN
+MASK_RCNN_DIR = os.path.abspath("../../Mask_RCNN/")
 
 # Import Mask RCNN
-sys.path.append(ROOT_DIR)  # To find local version of the library
+sys.path.append(MASK_RCNN_DIR)  # To find local version of the library
 from mrcnn.config import Config
 from mrcnn import model as modellib, utils
 
@@ -63,16 +66,52 @@ class OysterConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 2
+    IMAGES_PER_GPU = 1
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 1  # Background + oyster
 
-    # Number of training steps per epoch
-    STEPS_PER_EPOCH = 250
+    # If enabled, resizes instance masks to a smaller size to reduce
+    # memory load. Recommended when using high-resolution images.
+    USE_MINI_MASK = True
+    # we just don't have that many masks for this to be important and we prefer higher resolution masks
 
-    # Skip detections with < 90% confidence
-    DETECTION_MIN_CONFIDENCE = 0.7
+    # Anchor stride
+    # If 1 then anchors are created for each cell in the backbone feature map.
+    # If 2, then anchors are created for every other cell, and so on.
+    RPN_ANCHOR_STRIDE = 2
+
+    # Length of square anchor side in pixels
+    # adding one larger one and taking one smaller on off - chosen empirically
+    RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)
+
+    TRAIN_ROIS_PER_IMAGE = 32
+
+    # Learning rate and momentum
+    # The Mask RCNN paper uses lr=0.02, but on TensorFlow it causes
+    # weights to explode. Likely due to differences in optimizer
+    # implementation.
+    LEARNING_RATE = 0.001
+    LEARNING_MOMENTUM = 0.9
+
+    # Weight decay regularization
+    WEIGHT_DECAY = 0.0001
+
+    # Loss weights for more precise optimization.
+    # Can be used for R-CNN training setup.
+    LOSS_WEIGHTS = {
+        "rpn_class_loss": 1.,
+        "rpn_bbox_loss": 1.,
+        "mrcnn_class_loss": 1.,
+        "mrcnn_bbox_loss": 1.,
+        "mrcnn_mask_loss": 2.
+    }
+
+    # Number of training steps per epoch
+    STEPS_PER_EPOCH = 103
+
+    # Skip detections with < 0.01% confidence
+    DETECTION_MIN_CONFIDENCE = 0.020    
 
 
 ############################################################
@@ -90,7 +129,7 @@ class OysterDataset(utils.Dataset):
         self.add_class("oyster", 1, "oyster")
 
         # Train or validation dataset?
-        assert subset in ["train", "val"]
+        assert subset in ["train", "val", "test"]
         dataset_dir = os.path.join(dataset_dir, subset)
 
         # Load annotations
@@ -114,7 +153,8 @@ class OysterDataset(utils.Dataset):
 
         # The VIA tool saves images in the JSON even if they don't have any
         # annotations. Skip unannotated images.
-        annotations = [a for a in annotations if a['regions']]
+        # we don't do this because we do want images without annotations
+        #annotations = [a for a in annotations if a['regions']]
 
         # Add images
         for a in annotations:
@@ -203,7 +243,7 @@ def train(model):
     # fourth run run
     layers_training='all'
     
-    epochs_to_train=250
+    epochs_to_train=300
 
     # adding image augmentation parameters
 
@@ -241,7 +281,7 @@ def train(model):
 
     print("Training heads with augmentation.")
     print("*****Beginning training*****")
-    print("config.LEARNING_RATE", config.LEARNING_RATE/5)
+    print("config.LEARNING_RATE", config.LEARNING_RATE)
     print("layers_training:", layers_training)
     print("epochs_to_train:", epochs_to_train)
     print("augmentation: ", augmentation)
