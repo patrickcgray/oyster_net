@@ -1,8 +1,6 @@
-# Neural Network Based Oyster Delineation in Drone Imagery 
+# Deep learning for coastal resource conservation: automating detection of shellfish reefs
 
-This work shows the use of Mask R-CNN for detecting oyster reefs in aerial drone imagery.
-
-This repository has the code needed to go along with the Remote Sensing in Ecology and Conservation paper "Deep learning for coastal resource conservation: automating detection of shellfish reefs."
+This repository has the code needed to go along with the Remote Sensing in Ecology and Conservation paper "Deep learning for coastal resource conservation: automating detection of shellfish reefs." This work uses Mask R-CNN for detecting oyster reefs in aerial drone imagery.
 
 All data, both preprocessed and original raw data, necessary to reproduce this work is available at https://doi.org/10.5061/dryad.p8cz8w9k7.
 
