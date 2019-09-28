@@ -9,7 +9,7 @@ All data, both preprocessed and original raw data, necessary to reproduce this w
 
 ## Installation
 
-You can use the Dockerfile included in the `training/` directory of this repository to train the CNN and you can use the Dockerfile in `data_mgmt/` to manage the drone imagery and process everything. The training Docker container is created and run using this series of commands;
+You can use the Dockerfile included in the `training/` directory of this repository to train the CNN and you can use the Dockerfile in `data_mgmt/` to manage the drone imagery and process everything. The training Docker container is created and run using this series of commands:
 ```
 docker build -t training_img .
 docker run --name training_container --runtime=nvidia -it -p 8888:8888 -p 6006:6006 -v ~/:/host training_img
@@ -49,7 +49,7 @@ Open the `inspect_oyster_data.ipynb` jupyter notebook to explore this prepared d
 
 ## Train the Oyster model
 
-NOTE: pretrained models are available for all image sizes at:
+NOTE: pretrained models are available for all image sizes at: https://github.com/patrickcgray/oyster_net/releases.
 
 Train a new model starting from pre-trained COCO weights
 ```
@@ -71,4 +71,4 @@ Update the schedule to fit your needs.
 
 ## Run the Model and Analyze Output
 
-The model can be run at `inspect_oyster_model.ipynb` and users can both step through the detection pipelie or run it on a bulk set of images.
+The model can be run at `inspect_oyster_model.ipynb` and users can both step through the detection pipelie or run it on a bulk set of images. The geolocation information for each tile output from `data_mgmt/img_processing.ipynb` can be used along with the detections to convert the CNN output back to a geolocated polygon such as a shapefile or geojson polygon.
