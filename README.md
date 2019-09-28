@@ -4,12 +4,25 @@ This work shows the use of Mask R-CNN for detecting oyster reefs in aerial drone
 
 This repository has the code needed to go along with the Remote Sensing in Ecology and Conservation paper "Deep learning for coastal resource conservation: automating detection of shellfish reefs."
 
-All data necessary to reproduce this work is available at https://doi.org/10.5061/dryad.p8cz8w9k7.
+All data, both preprocessed and original raw data, necessary to reproduce this work is available at https://doi.org/10.5061/dryad.p8cz8w9k7.
 
 
 ## Installation
 
-You can use the Dockerfile included in the `training/` directory of this repository to train the CNN and you can use the Dockerfile in `data_mgmt/` to manage the drone imagery and process everything. All processed data and raw data is available here: 
+You can use the Dockerfile included in the `training/` directory of this repository to train the CNN and you can use the Dockerfile in `data_mgmt/` to manage the drone imagery and process everything. The training Docker container is created and run using this series of commands;
+```
+docker build -t training_img .
+docker run --name training_container --runtime=nvidia -it -p 8888:8888 -p 6006:6006 -v ~/:/host training_img
+```
+Once this container is running you cans start the jupyter notebook running inside of the container with:
+```
+jupyter notebook --allow-root --ip 0.0.0.0 /host
+```
+The data_mgmt container is similar except without the nvidia runtime
+```
+docker build -t data_mgmt_img .
+docker run --name data_mgmt_container -it -p 8888:8888 -p 6006:6006 -v ~/:/host data_mgmt_img
+```
 
 You will need Mask_RCNN installed in a directory at an equal level with this one. From the [Releases page](https://github.com/matterport/Mask_RCNN/releases) page download [version 2.1](https://github.com/matterport/Mask_RCNN/releases/tag/v2.1) and follow instructions here https://github.com/matterport/Mask_RCNN#installation for setting up Mask R-CNN.
 
@@ -28,12 +41,15 @@ logs/
 ```
 
 ## Prepare Data
+Convert the original drone mosaics into tiles appropriate for deep learning analysis through this notebook: `data_mgmt/img_processing.ipynb`and shuffle and organize these tiles into training, validation, and testing datasets using `data_mgmt/training_data_management.ipynb`.
 
 ## Inspect Data
 
-Open the `inspect_oyster_data.ipynb` or `inspect_oyster_model.ipynb` Jupter notebooks. You can use these notebooks to explore the dataset and run through the detection pipelie step by step.
+Open the `inspect_oyster_data.ipynb` jupyter notebook to explore this prepared dataset.
 
 ## Train the Oyster model
+
+NOTE: pretrained models are available for all image sizes at:
 
 Train a new model starting from pre-trained COCO weights
 ```
@@ -54,3 +70,5 @@ The code in `oyster.py` is set to train for 25K steps (100 epochs of 250 steps e
 Update the schedule to fit your needs.
 
 ## Run the Model and Analyze Output
+
+The model can be run at `inspect_oyster_model.ipynb` and users can both step through the detection pipelie or run it on a bulk set of images.
