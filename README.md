@@ -2,7 +2,7 @@
 
 This repository has the code needed to go along with the Remote Sensing in Ecology and Conservation paper "Deep learning for coastal resource conservation: automating detection of shellfish reefs." This work uses Mask R-CNN for detecting oyster reefs in aerial drone imagery.
 
-All data, both preprocessed and original raw data, necessary to reproduce this work is available on the [Duke Digital Repository](https://research.repository.duke.edu/).
+All data, both preprocessed and original raw data, necessary to reproduce this work is available on the Duke Digital Repository at DOI: [10.7924/r4cv4gx0h](https://doi.org/10.7924/r4cv4gx0h)
 
 
 ## Installation
